@@ -35,6 +35,16 @@
 
         <script src="https://cdn.jsdelivr.net/npm/handsontable@latest/dist/handsontable.full.min.js"></script>
         <script>
+
+            /*
+                Test Data:
+                487545	V-Neck T-Shirt	€4.50
+                487546	Chinos	€15
+                487547	Jeans	€12.50
+                487548	ACDC T-Shirt	€7.50
+                487549	Metallica T-Shirt	€7.50
+            */
+
             function table(){
                 var hotElement = document.querySelector('#hot');
                 var hotElementContainer = hotElement.parentNode;
@@ -70,9 +80,56 @@
                 };
                 var hot = new Handsontable(hotElement, hotSettings);
                 document.getElementById("export-csv").addEventListener("click", function(event) { hot.getPlugin("exportFile").downloadFile("csv", {filename: "product.management.addProdcut"});})
-                document.getElementById("store-api").addEventListener("click", function(event) {console.log(hot.getPlugin("exportFile").exportAsString("csv"));})
-            }
+                document.getElementById("store-api").addEventListener('click', function() {
+                    var exportedString = hot.getPlugin("exportFile").exportAsString('csv', {
+                    bom: true,
+                    columnDelimiter: ',',
+                    columnHeaders: false,
+                    exportHiddenColumns: true,
+                    exportHiddenRows: true,
+                    mimeType: 'text/csv',
+                    rowDelimiter: '\r\n',
+                    rowHeaders: true
+                    });
 
+                    let input = hot.getData();
+                    let i = 0;
+                    let j = 1;
+
+                    while (input[i] != null) {
+
+                        if (input[i][0] == null || input[i][1] == null || input[i][2] == null || input[i][0] == "" || input[i][1] == "" || input[i][2] == "" ){
+                            alert("Invalid entry in row " + j + ". All previous rows stored");
+                            return 0;
+                        }
+
+                        const headers = new Headers()
+                        headers.append("Content-Type", "application/json")
+
+                        const body = {
+                            "SKU": input[i][0],
+                            "Description": input[i][1],
+                            "Price": input[i][2]
+                        }
+
+                        const options = {
+                        method: "POST",
+                        headers,
+                        mode: "cors",
+                        body: JSON.stringify(body),
+                        }
+
+                        fetch("https://entpebyij95.x.pipedream.net/", options)
+
+                        i++
+                        j++
+                    }
+
+                    console.log("Success! This is the data sent to request bin: ");
+                    console.log(hot.getData());
+
+                });
+            }
         </script>
     </body>
 </html>
