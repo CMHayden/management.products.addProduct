@@ -4,96 +4,76 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>management.products</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/handsontable@latest/dist/handsontable.full.min.css">
+        <link rel="stylesheet" type="text/css" href="https://handsontable.com/static/css/main.css">
 
-        <!-- Styles -->
         <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
+            h1, p {
                 text-align: center;
             }
 
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
+            .center-align-handsontable {
+                width: 900px;
+                margin: auto;
             }
         </style>
     </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
+    <body onload="table()">
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
+        <h1>Add products</h1>
+        <p>Add a new product using the table below</p>
 
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+        <div class="center-align-handsontable">
+            <div id="hot"></div>
+            <div id="export-buttons" class="visible">
+                <button id="export-csv" class="btn size-medium bg-blue text-white shadow hover-moveup" style="margin-right: 5px;">Export as .csv</button>
+                <button id="store-api" class="btn size-medium bg-green text-white shadow hover-moveup">Store in API</button>
             </div>
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/handsontable@latest/dist/handsontable.full.min.js"></script>
+        <script>
+            function table(){
+                var hotElement = document.querySelector('#hot');
+                var hotElementContainer = hotElement.parentNode;
+                var hotSettings = {
+                    columns: [
+                    {
+                        data: 'sku',
+                        type: 'numeric',
+                        width: 40
+                    },
+                    {
+                        data: 'description',
+                        type: 'text'
+                    },
+                    {
+                        data: 'price',
+                        type: 'text'
+                    }
+
+                    ],
+                    stretchH: 'all',
+                    width: 837,
+                    autoWrapRow: true,
+                    height: 300,
+                    maxRows: 22,
+                    rowHeaders: true,
+                    colHeaders: [
+                    'SKU',
+                    'Description',
+                    'Price'
+                    ],
+                    exportFile: true
+                };
+                var hot = new Handsontable(hotElement, hotSettings);
+                document.getElementById("export-csv").addEventListener("click", function(event) { hot.getPlugin("exportFile").downloadFile("csv", {filename: "product.management.addProdcut"});})
+                document.getElementById("store-api").addEventListener("click", function(event) {console.log(hot.getPlugin("exportFile").exportAsString("csv"));})
+            }
+
+        </script>
     </body>
 </html>
+
