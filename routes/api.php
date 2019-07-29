@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,13 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/products', function(Request $request){
+
+    $guzzleClient = new Client();
+    $guzzleResponse = $guzzleClient->post('https://entpebyij95.x.pipedream.net/', ['body' => $request->getContent()]);
+
+
+    return $guzzleResponse;
+});
+
