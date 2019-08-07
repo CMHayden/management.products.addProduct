@@ -21,7 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/products', function(Request $request){
 
     $guzzleClient = new Client();
-    $guzzleResponse = $guzzleClient->post('https://entpebyij95.x.pipedream.net/', ['body' => $request->getContent()]);
+    // $guzzleResponse = $guzzleClient->post('https://entpebyij95.x.pipedream.net/', ['body' => $request->getContent()]);
+    $guzzleResponse = $guzzleClient->post('https://api.staging.coding.cab/products', ['body' => $request->getContent()]);
 
 
     return $guzzleResponse;
