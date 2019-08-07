@@ -23,7 +23,7 @@
     </head>
     <body onload="table()">
 
-        <h1>Add products | <a href="https://requestbin.com/r/entpebyij95/1OBSTNBoEbRuaCVgDbR67yZMCqZ">Request Bin</a></h1>
+        <h1>Add products</h1>
         <p>Add a new product using the table below</p>
 
         <div class="center-align-handsontable">
